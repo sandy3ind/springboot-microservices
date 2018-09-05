@@ -1,0 +1,24 @@
+server:
+  port: 8000
+  
+zuul:
+  prefix: /api
+  routes:
+    organizationService:
+      path: /organization/**
+      serviceId: organization-service
+    employeeService:
+      path: /employee/**
+      serviceId: employee-service
+    departmentService:
+      path: /department/**
+      serviceId: department-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
+      
+logging:
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n" 
