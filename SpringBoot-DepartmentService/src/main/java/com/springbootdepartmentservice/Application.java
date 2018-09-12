@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import com.springbootdepartmentservice.model.Department;
 import com.springbootdepartmentservice.repository.DepartmentRepository;
 
+import feign.RequestInterceptor;
+
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
@@ -27,4 +29,9 @@ public class Application {
 		repository.add(new Department(2L, "Operations"));		
 		return repository;
 	}
+	
+	@Bean
+    public RequestInterceptor getFeignClientInterceptor() {
+        return new FeignClientInterceptor();
+    }
 }

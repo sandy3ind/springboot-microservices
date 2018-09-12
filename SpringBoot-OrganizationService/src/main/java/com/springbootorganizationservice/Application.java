@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import com.springbootorganizationservice.model.Organization;
 import com.springbootorganizationservice.repository.OrganizationRepository;
 
+import feign.RequestInterceptor;
+
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
@@ -25,4 +27,9 @@ public class Application {
 		repository.add(new Organization("Oracle", "Redwood City, California, USA"));	
 		return repository;
 	}
+	
+	@Bean
+    public RequestInterceptor getFeignClientInterceptor() {
+        return new FeignClientInterceptor();
+    }
 }

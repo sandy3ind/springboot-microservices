@@ -6,18 +6,46 @@ zuul:
   routes:
     organizationService:
       path: /organization/**
+      sensitiveHeaders:
       serviceId: organization-service
     employeeService:
       path: /employee/**
+      sensitiveHeaders:
       serviceId: employee-service
     departmentService:
       path: /department/**
+      sensitiveHeaders:
       serviceId: department-service
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8061/eureka/
+      
+
+      
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:8080/oauth/check_token
+    client:      
+      #accessTokenUri: http://localhost:8080/oauth/token
+      #userAuthorizationUri: http://localhost:8080/oauth/authorize
+      clientId: account-service
+      clientSecret: secret
+    #user:
+      #name: sandeep
+      #password: 111
+    #resource:
+      #userInfoUri: http://localhost:9000/user
+
+#Downstream oauth configure     
+proxy:
+  auth:
+    routes:
+      organizationService: oauth2
+      employeeService: oauth2
+      departmentService: oauth2
       
 logging:
   pattern: 

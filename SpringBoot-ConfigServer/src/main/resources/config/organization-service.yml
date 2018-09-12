@@ -6,6 +6,20 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8061/eureka/
       
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:8080/oauth/check_token
+    client:  
+      clientId: account-service
+      clientSecret: secret
+      
+feign:
+  hystrix:
+    enabled: true
+hystrix:
+  shareSecurityContext: true
+      
 logging:
   pattern: 
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
