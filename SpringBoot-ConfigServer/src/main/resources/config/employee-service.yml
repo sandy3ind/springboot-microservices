@@ -12,7 +12,7 @@ security:
     resource:
       token-info-uri: http://localhost:8080/oauth/check_token
     client:  
-      clientId: account-service
+      clientId: organization-service
       clientSecret: secret
       
 feign:

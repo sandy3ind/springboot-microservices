@@ -13,6 +13,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
     public void configure(HttpSecurity http) throws Exception {
         http           
-            .authorizeRequests().anyRequest().authenticated();
+            .authorizeRequests().antMatchers("/api/organization/**")
+            .hasAnyAuthority("ORGANIZATION_READ", "ORGANIZATION_CREATE", "ORGANIZATION_UPDATE", "ORGANIZATION_DELETE")
+            .anyRequest().authenticated();
     }
 }

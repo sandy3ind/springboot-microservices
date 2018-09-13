@@ -31,7 +31,7 @@ security:
     client:      
       #accessTokenUri: http://localhost:8080/oauth/token
       #userAuthorizationUri: http://localhost:8080/oauth/authorize
-      clientId: account-service
+      clientId: organization-service
       clientSecret: secret
     #user:
       #name: sandeep

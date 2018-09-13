@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import com.springbootemployeeservice.model.Employee;
 import com.springbootemployeeservice.repository.EmployeeRepository;
 
+import feign.RequestInterceptor;
+
 @EnableDiscoveryClient
 @SpringBootApplication
 public class Application {
@@ -31,4 +33,9 @@ public class Application {
 		repository.add(new Employee(2L, 4L, "Elisabeth Smith", 30, "Developer"));
 		return repository;
 	}
+	
+	@Bean
+    public RequestInterceptor getFeignClientInterceptor() {
+        return new FeignClientInterceptor();
+    }
 }

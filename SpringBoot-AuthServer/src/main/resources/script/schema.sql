@@ -52,3 +52,26 @@ create table oauth_approvals (
     expiresAt DATETIME,
     lastModifiedAt DATETIME
 );
+
+
+
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `password` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `roles` (
+  `role_id` int(2) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `users_roles` (
+  `user_id` bigint(20) NOT NULL,
+  `role_id` int(2) NOT NULL
+) ENGINE=InnoDB;
+
+
