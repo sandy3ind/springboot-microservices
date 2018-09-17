@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.springbootorganizationservice.model.Department;
 
-@FeignClient(name = "department-service")
+@FeignClient(name = "department-service", fallbackFactory = DepartmentClientFallbackFactory.class)
 public interface DepartmentClient {
 
 	@GetMapping("/organization/{organizationId}")

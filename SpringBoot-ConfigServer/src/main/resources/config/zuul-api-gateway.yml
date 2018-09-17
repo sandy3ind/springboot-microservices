@@ -47,6 +47,13 @@ proxy:
       employeeService: oauth2
       departmentService: oauth2
       
+spring:  
+  zipkin:
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1
+      
 logging:
   pattern: 
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n" 
