@@ -1,0 +1,12 @@
+server:
+  port: 8000
+
+spring:
+  datasource:
+    initialization-mode: always
+    url: jdbc:mysql://localhost:3306/sample
+    username: root
+    password: root
+    schema: classpath:script/schema.sql
+    data: classpath:script/data.sql
+    
