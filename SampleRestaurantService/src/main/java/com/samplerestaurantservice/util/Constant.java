@@ -1,8 +1,8 @@
 package com.samplerestaurantservice.util;
 
 public class Constant {
-
-	public enum FoodType {
-		
+	
+	public enum ErrorType {
+		VALIDATION, NON_UNIQUE
 	}
 }
