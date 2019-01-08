@@ -1,19 +1,21 @@
 package com.samplerestaurantservice.entity;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.joda.time.DateTime;
 
 @Entity
 @Table(name="restaurants")
@@ -30,8 +32,9 @@ public class Restaurant {
 	@Column(name="description")
 	private String description;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_date")
-	private DateTime createdDate;
+	private Date createdDate;
 	
 	@Column(name="rating")
 	private float rating;
@@ -49,8 +52,21 @@ public class Restaurant {
 	@Column(name="longitude")
 	private double longitude;
 	
-	@OneToMany
+	@ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "restaurants_cuisines", 
+        joinColumns = { @JoinColumn(name = "restaurant_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "cuisine_id") }
+    )
 	private List<Cuisine> cuisines;
+	
+	
+	// Constructors
+	public Restaurant() {}
+	
+	public Restaurant(long id) {
+		this.id = id;
+	}
 
 	public long getId() {
 		return id;
@@ -76,11 +92,11 @@ public class Restaurant {
 		this.description = description;
 	}
 
-	public DateTime getCreatedDate() {
+	public Date getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(DateTime createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 

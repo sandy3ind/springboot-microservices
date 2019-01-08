@@ -13,16 +13,16 @@ public class Cuisine {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="cuisine_id")
-	private int id;
+	private long id;
 	
 	@Column(name="name")
 	private String name;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
