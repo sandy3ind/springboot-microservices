@@ -1,0 +1,13 @@
+SQLs
+
+- Restaurant menus
+select b.restaurant_menu_id, c.name from restaurants a, restaurant_menus b, menus c where a.restaurant_id=b.restaurant_id and b.menu_id=c.menu_id;
+
+- Restaurant menu categories
+select a.menu_id, c.name, b.category_id, d.name from restaurant_menus a, restaurant_categories b, menus c, categories d where a.restaurant_menu_id=b.restaurant_menu_id and a.menu_id=c.menu_id and b.category_id=d.category_id;
+
+- Recommonded foods - id=2
+select * from restaurant_foods a, restaurant_menus b where a.restaurant_menu_id=b.restaurant_menu_id and b.restaurant_menu_id=2;
+
+- Thali - id=5
+select * from restaurant_foods a, restaurant_menus b where a.restaurant_menu_id=b.restaurant_menu_id and b.restaurant_menu_id=5;

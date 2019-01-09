@@ -1,6 +1,6 @@
 package com.samplerestaurantservice.entity;
 
-public class RestaurantCustomizeType {
+public class RestaurantOptionType {
 	
 	private int id;
 	

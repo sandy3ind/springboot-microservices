@@ -22,11 +22,11 @@ public class RestaurantFood {
 	
 	@OneToOne
 	@JoinColumn(name="restaurant_category_id")
-	private RestaurantCategory category;
+	private RestaurantCategory restaurantCategory;
 	
 	@OneToOne
 	@JoinColumn(name="restaurant_menu_id")
-	private RestaurantMenu menu;
+	private RestaurantMenu restaurantMenu;
 
 	public long getId() {
 		return id;
@@ -44,19 +44,19 @@ public class RestaurantFood {
 		this.name = name;
 	}
 
-	public RestaurantCategory getCategory() {
-		return category;
+	public RestaurantCategory getRestaurantCategory() {
+		return restaurantCategory;
 	}
 
-	public void setCategory(RestaurantCategory category) {
-		this.category = category;
+	public void setRestaurantCategory(RestaurantCategory restaurantCategory) {
+		this.restaurantCategory = restaurantCategory;
 	}
 
-	public RestaurantMenu getMenu() {
-		return menu;
+	public RestaurantMenu getRestaurantMenu() {
+		return restaurantMenu;
 	}
 
-	public void setMenu(RestaurantMenu menu) {
-		this.menu = menu;
-	}	
+	public void setRestaurantMenu(RestaurantMenu restaurantMenu) {
+		this.restaurantMenu = restaurantMenu;
+	}
 }

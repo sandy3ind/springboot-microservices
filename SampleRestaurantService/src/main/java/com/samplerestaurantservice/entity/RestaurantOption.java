@@ -1,10 +1,10 @@
 package com.samplerestaurantservice.entity;
 
-public class RestaurantCustomize {
+public class RestaurantOption {
 
 	private int id;
 	private float price;
 	private float discountPercentage;
 	
-	private RestaurantCustomizeType restaurantCustomizeType;
+	private RestaurantOptionType restaurantCustomizeType;
 }
