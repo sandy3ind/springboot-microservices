@@ -7,5 +7,5 @@ public class AddOn {
 	private int id;
 	private String name;
 	
-	private List<AddOnItem> items;
+	private List<AddOnItem> addOnItems;
 }

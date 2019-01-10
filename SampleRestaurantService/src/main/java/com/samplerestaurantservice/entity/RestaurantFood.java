@@ -27,6 +27,12 @@ public class RestaurantFood {
 	@OneToOne
 	@JoinColumn(name="restaurant_menu_id")
 	private RestaurantMenu restaurantMenu;
+	
+	// Constructors
+	public RestaurantFood() {}
+	public RestaurantFood(long id) {
+		this.id = id;
+	}
 
 	public long getId() {
 		return id;

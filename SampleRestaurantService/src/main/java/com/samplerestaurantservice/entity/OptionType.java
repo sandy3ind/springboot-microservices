@@ -16,7 +16,7 @@ public class OptionType {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="option_type_id")
-	private int id;
+	private long id;
 	
 	@Column(name="name")
 	private String name;
@@ -24,12 +24,18 @@ public class OptionType {
 	@OneToMany
 	private
 	List<Option> options;
+	
+	// Constructors
+	public OptionType() {}
+	public OptionType(long id) {
+		this.id = id;
+	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

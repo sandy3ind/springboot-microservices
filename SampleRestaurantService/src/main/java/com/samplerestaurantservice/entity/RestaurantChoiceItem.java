@@ -1,10 +1,10 @@
 package com.samplerestaurantservice.entity;
 
-public class RestaurantAddOnItem {
+public class RestaurantChoiceItem {
 
 	private long id;
 	private float price;
 	
-	private RestaurantAddOn restaurantAddOn;
+	private RestaurantChoice restaurantChoice;
 	
 }

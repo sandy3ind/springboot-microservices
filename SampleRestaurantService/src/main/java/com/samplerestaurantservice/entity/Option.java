@@ -15,7 +15,7 @@ public class Option {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="option_id")
-	private int id;
+	private long id;
 	
 	@Column(name="name")
 	private String name;
@@ -23,12 +23,18 @@ public class Option {
 	@ManyToOne
 	@JoinColumn(name="option_type")
 	private OptionType optionType;
+	
+	// Constructors
+	public Option() {}
+	public Option(long id) {
+		this.id = id;
+	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

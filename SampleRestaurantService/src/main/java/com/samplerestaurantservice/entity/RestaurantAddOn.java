@@ -5,5 +5,5 @@ public class RestaurantAddOn {
 	private long id;
 	
 	
-	private RestaurantFood restaurantFood;
+	private AddOn addOn;
 }
