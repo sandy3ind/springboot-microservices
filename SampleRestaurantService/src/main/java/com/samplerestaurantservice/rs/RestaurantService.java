@@ -10,14 +10,18 @@ import javax.validation.Valid;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.samplerestaurantservice.entity.Cuisine;
@@ -25,7 +29,9 @@ import com.samplerestaurantservice.entity.Restaurant;
 import com.samplerestaurantservice.respository.CuisineRepository;
 import com.samplerestaurantservice.respository.RestaurantRepository;
 import com.samplerestaurantservice.util.Constant.ErrorType;
+import com.samplerestaurantservice.util.GoogleMapUtility;
 import com.samplerestaurantservice.util.ResponseError;
+import com.samplerestaurantservice.util.Utility;
 
 @RestController
 @RequestMapping("/")
@@ -77,9 +83,56 @@ public class RestaurantService {
 		return ResponseEntity.ok().build();
 	}	
 	
+	/**
+	 * Get all Restaurants
+	 * 
+	 * @return
+	 */
 	@GetMapping
 	public ResponseEntity<?> list() {
 		List<Restaurant> restaurants = (List<Restaurant>) restaurantRepository.findAll();
+		return ResponseEntity.ok(restaurants);
+	}
+	
+	/**
+	 * Fetch all/search the Nearest Restaurants within given Distance
+	 * 
+	 * @param lat
+	 * @param lng
+	 * @param distance
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	@GetMapping("nearest/lat/{lat}/lng/{lng}/distance/{distance}/page/{page}/limit/{limit}")
+	public ResponseEntity<?> nearBy(
+			@PathVariable("lat") double lat,
+			@PathVariable("lng") double lng,
+			@PathVariable("distance") double distance,
+			@PathVariable("page") int page,
+			@PathVariable("limit") int limit,
+			@RequestParam(name="search", required=false) String search) {
+		
+		Pageable pageable = PageRequest.of(page, limit);
+		
+		// Do not pass null to query
+		if (search == null) {
+			search = "";
+		}
+		
+		List<Restaurant> restaurants = restaurantRepository.findNearestRestaurants(lat, lng, distance, search, pageable);
+		
+		if (restaurants != null && !restaurants.isEmpty()) {
+			List<Restaurant> newRestaurants = restaurants.stream()
+					.map(r -> {
+						double distance1 = GoogleMapUtility.calculateDistance(lat, lng, r.getLatitude(), r.getLongitude());
+						r.setDistance(Utility.limitDecimal(distance1, 1));
+						return r;
+					}).collect(Collectors.toList());
+			return ResponseEntity.ok(newRestaurants);
+		}
+		
 		return ResponseEntity.ok(restaurants);
 	}
 }

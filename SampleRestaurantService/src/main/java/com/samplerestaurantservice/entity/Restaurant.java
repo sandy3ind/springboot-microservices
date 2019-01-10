@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -59,6 +60,9 @@ public class Restaurant {
         inverseJoinColumns = { @JoinColumn(name = "cuisine_id") }
     )
 	private List<Cuisine> cuisines;
+	
+	@Transient
+	private double distance;
 	
 	
 	// Constructors
@@ -146,6 +150,14 @@ public class Restaurant {
 
 	public void setCuisines(List<Cuisine> cuisines) {
 		this.cuisines = cuisines;
+	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 	
 }
