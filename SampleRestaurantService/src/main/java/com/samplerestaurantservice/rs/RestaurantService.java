@@ -24,8 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.samplerestaurantservice.entity.Cuisine;
 import com.samplerestaurantservice.entity.Restaurant;
+import com.samplerestaurantservice.entity.RestaurantCategory;
+import com.samplerestaurantservice.entity.RestaurantFood;
 import com.samplerestaurantservice.entity.RestaurantMenu;
 import com.samplerestaurantservice.respository.CuisineRepository;
+import com.samplerestaurantservice.respository.RestaurantCategoryRepository;
+import com.samplerestaurantservice.respository.RestaurantFoodRepository;
 import com.samplerestaurantservice.respository.RestaurantMenuRepository;
 import com.samplerestaurantservice.respository.RestaurantRepository;
 import com.samplerestaurantservice.util.Constant.ErrorType;
@@ -45,6 +49,12 @@ public class RestaurantService {
 	
 	@Autowired
 	private RestaurantMenuRepository restaurantMenuRepository;
+	
+	@Autowired
+	private RestaurantCategoryRepository restaurantCategoryRepository;
+	
+	@Autowired
+	private RestaurantFoodRepository restaurantFoodRepository;
 	
 	
 
@@ -165,10 +175,54 @@ public class RestaurantService {
 		List<RestaurantMenu> restaurantMenus = restaurantMenuRepository.findByRestaurant(restaurant);
 		if (restaurantMenus != null) {
 			List<RestaurantMenu> newRestaurantMenus = restaurantMenus.stream()
-					.map(menu -> new RestaurantMenu(menu)).collect(Collectors.toList());
+					.map(menu -> {
+						RestaurantMenu restaurantMenu = new RestaurantMenu(menu);
+						
+						// Set Categories
+						setRestaurantMenuCategories(restaurantMenu);
+						// Set Foods
+						setRestaurantMenuFoods(restaurantMenu);
+						
+						return restaurantMenu;
+					}).collect(Collectors.toList());			
+					
 			restaurant.setMenus(newRestaurantMenus);
 		}	
 				
 		return ResponseEntity.ok(restaurant);
+	}
+	
+	/**
+	 * Set RestaurantCategories to RestaurantMenu
+	 * 
+	 * @param restaurantMenu
+	 */
+	private void setRestaurantMenuCategories(RestaurantMenu restaurantMenu) {
+		// Fetch all the RestaurantCategories of the restaurantMenu
+		List<RestaurantCategory> categories = restaurantCategoryRepository.findByRestaurantMenu(restaurantMenu);
+		if (categories != null) {
+			List<RestaurantCategory> newCategories = categories.stream()
+					.map(category -> {
+						return new RestaurantCategory(category);
+					}).collect(Collectors.toList());
+			restaurantMenu.setCategories(newCategories);
+		}
+	}
+	
+	/**
+	 * Set RestaurantFoods to RestaurantMenu
+	 * 
+	 * @param restaurantMenu
+	 */
+	private void setRestaurantMenuFoods(RestaurantMenu restaurantMenu) {
+		// Fetch all the RestaurantFoods of the restaurantMenu
+		List<RestaurantFood> foods = restaurantFoodRepository.findByRestaurantMenu(restaurantMenu);
+		if (foods != null) {
+			List<RestaurantFood> newFoods = foods.stream()
+					.map(food -> {
+						return new RestaurantFood(food);
+					}).collect(Collectors.toList());
+			restaurantMenu.setFoods(newFoods);
+		}
 	}
 }
