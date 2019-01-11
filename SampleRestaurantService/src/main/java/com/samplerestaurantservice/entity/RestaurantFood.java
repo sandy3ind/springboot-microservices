@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,18 +21,36 @@ public class RestaurantFood {
 	@Column(name="name")
 	private String name;
 	
-	@OneToOne
+	@Column(name="price")
+	private float price; // Price shown on the list (lowest price)
+	
+	@Column(name="discount") // discount related to price shown
+	private float discount;
+	
+	@Column(name="customizable")
+	private boolean customizable;
+	
+	@ManyToOne
 	@JoinColumn(name="restaurant_category_id")
 	private RestaurantCategory restaurantCategory;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="restaurant_menu_id")
 	private RestaurantMenu restaurantMenu;
 	
 	// Constructors
-	public RestaurantFood() {}
+	public RestaurantFood() {}	
 	public RestaurantFood(long id) {
 		this.id = id;
+	}
+	// Copy constructor
+	public RestaurantFood(RestaurantFood restaurantFood) {
+		this(restaurantFood.getId());
+		this.setName(restaurantFood.getName());
+		this.setDiscount(restaurantFood.getDiscount());
+		this.setCustomizable(restaurantFood.isCustomizable());
+		//this.setRestaurantCategory(restaurantCategory);
+		//this.setRestaurantMenu(restaurantMenu);
 	}
 
 	public long getId() {
@@ -64,5 +83,29 @@ public class RestaurantFood {
 
 	public void setRestaurantMenu(RestaurantMenu restaurantMenu) {
 		this.restaurantMenu = restaurantMenu;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
+	public float getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(float discount) {
+		this.discount = discount;
+	}
+
+	public boolean isCustomizable() {
+		return customizable;
+	}
+
+	public void setCustomizable(boolean customizable) {
+		this.customizable = customizable;
 	}
 }

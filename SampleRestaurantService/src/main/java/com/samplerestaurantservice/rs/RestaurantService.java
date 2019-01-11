@@ -3,12 +3,10 @@ package com.samplerestaurantservice.rs;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.samplerestaurantservice.entity.Cuisine;
 import com.samplerestaurantservice.entity.Restaurant;
+import com.samplerestaurantservice.entity.RestaurantMenu;
 import com.samplerestaurantservice.respository.CuisineRepository;
+import com.samplerestaurantservice.respository.RestaurantMenuRepository;
 import com.samplerestaurantservice.respository.RestaurantRepository;
 import com.samplerestaurantservice.util.Constant.ErrorType;
 import com.samplerestaurantservice.util.GoogleMapUtility;
@@ -42,6 +42,11 @@ public class RestaurantService {
 	
 	@Autowired
 	private CuisineRepository cuisineRepository;
+	
+	@Autowired
+	private RestaurantMenuRepository restaurantMenuRepository;
+	
+	
 
 	/**
 	 * Save/Update Restaurant
@@ -134,5 +139,36 @@ public class RestaurantService {
 		}
 		
 		return ResponseEntity.ok(restaurants);
+	}
+	
+	/**
+	 * Get Restaurant complete detail
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("{id}/detail")
+	public ResponseEntity<?> detail(
+			@PathVariable("id") long id) {
+		
+		Restaurant restaurant = restaurantRepository.findById(id).get();		
+		
+		// If restaurant is null then return NoContent
+		if (restaurant == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		// Make fresh copy of restaurant		
+		restaurant = new Restaurant(restaurant);
+		
+		// Set Menus
+		List<RestaurantMenu> restaurantMenus = restaurantMenuRepository.findByRestaurant(restaurant);
+		if (restaurantMenus != null) {
+			List<RestaurantMenu> newRestaurantMenus = restaurantMenus.stream()
+					.map(menu -> new RestaurantMenu(menu)).collect(Collectors.toList());
+			restaurant.setMenus(newRestaurantMenus);
+		}	
+				
+		return ResponseEntity.ok(restaurant);
 	}
 }

@@ -24,9 +24,21 @@ public class Menu {
 	public Menu(long id) {
 		this.id = id;
 	}
+	
+	// Copy Constructor
+	public Menu(Menu menu) {
+		this(menu.getId());		
+		this.name = menu.getName();
+	}	
 
 	public long getId() {
 		return id;
+	}
+
+	public Menu(long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
 	}
 
 	public void setId(long id) {

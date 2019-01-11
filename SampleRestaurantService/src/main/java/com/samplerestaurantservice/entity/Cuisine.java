@@ -17,6 +17,19 @@ public class Cuisine {
 	
 	@Column(name="name")
 	private String name;
+	
+	// Constructors
+	public Cuisine() {}
+	
+	public Cuisine(long id) {
+		this.id = id;
+	}
+	
+	// Copy Constructors
+	public Cuisine(Cuisine cuisine) {
+		this(cuisine.getId());
+		this.name = cuisine.getName();
+	}
 
 	public long getId() {
 		return id;

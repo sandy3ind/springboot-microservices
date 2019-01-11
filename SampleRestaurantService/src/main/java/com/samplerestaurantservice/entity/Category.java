@@ -24,6 +24,20 @@ public class Category {
 	@JoinColumn(name="menu_id")
 	private Menu menu;
 	
+	// Constructors
+	public Category() {}
+	public Category(long id) {		
+		this.id = id;
+	}
+	
+	public Category(Category category) {
+		this(category.getId());		
+		this.name = category.getName();
+		this.menu = new Menu(category.getMenu());
+	}
+
+
+
 	public long getId() {
 		return id;
 	}

@@ -2,16 +2,19 @@ package com.samplerestaurantservice.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -61,8 +64,15 @@ public class Restaurant {
     )
 	private List<Cuisine> cuisines;
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="restaurant")
+	private List<RestaurantMenu> menus;
+	
+	
+	private int deliveryTime;
+	
 	@Transient
 	private double distance;
+		
 	
 	
 	// Constructors
@@ -70,6 +80,31 @@ public class Restaurant {
 	
 	public Restaurant(long id) {
 		this.id = id;
+	}
+	
+	// Copy Constructor
+	public Restaurant(Restaurant restaurant) {
+		this(restaurant.getId());
+		this.name = restaurant.getName();
+		this.description = restaurant.getDescription();
+		this.createdDate = restaurant.getCreatedDate();
+		this.rating = restaurant.getRating();
+		this.priceForTwo = restaurant.getPriceForTwo();
+		this.address = restaurant.getAddress();
+		this.latitude = restaurant.getLatitude();
+		this.longitude = restaurant.getLongitude();
+		this.deliveryTime = restaurant.getDeliveryTime();
+		this.distance = restaurant.getDistance();
+		
+		if (restaurant.getCuisines() != null && !restaurant.getCuisines().isEmpty()) {
+			this.cuisines = restaurant.getCuisines().stream()
+					.map(cuisine -> new Cuisine(cuisine)).collect(Collectors.toList());
+		}
+		/*
+		if (restaurant.getMenus() != null && !restaurant.getMenus().isEmpty()) {
+			this.menus = restaurant.getMenus().stream()
+					.map(menu -> new RestaurantMenu(menu)).collect(Collectors.toList());
+		}*/
 	}
 
 	public long getId() {
@@ -158,6 +193,22 @@ public class Restaurant {
 
 	public void setDistance(double distance) {
 		this.distance = distance;
+	}
+
+	public int getDeliveryTime() {
+		return deliveryTime;
+	}
+
+	public void setDeliveryTime(int deliveryTime) {
+		this.deliveryTime = deliveryTime;
+	}
+
+	public List<RestaurantMenu> getMenus() {
+		return menus;
+	}
+
+	public void setMenus(List<RestaurantMenu> menus) {
+		this.menus = menus;
 	}
 	
 }
