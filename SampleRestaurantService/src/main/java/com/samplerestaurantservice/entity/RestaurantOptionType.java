@@ -25,6 +25,17 @@ public class RestaurantOptionType {
 	@OneToOne
 	@JoinColumn(name="option_type_id")
 	private OptionType optionType;
+	
+	// Constructors
+	public RestaurantOptionType() {}
+	public RestaurantOptionType(int id) {		
+		this.id = id;
+	}
+	// Copy Constructors
+	public RestaurantOptionType(RestaurantOptionType restaurantOptionType) {
+		this(restaurantOptionType.getId());		
+		this.optionType = new OptionType(restaurantOptionType.getOptionType());
+	}
 
 	public int getId() {
 		return id;

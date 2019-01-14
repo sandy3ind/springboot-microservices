@@ -1,5 +1,7 @@
 package com.samplerestaurantservice.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,6 +24,9 @@ public class RestaurantCategory {
 	@OneToOne
 	@JoinColumn(name="category_id")
 	private Category category;
+	
+	@OneToMany(mappedBy="restaurantCategory")
+	private List<RestaurantFood> foods;
 	
 	@ManyToOne
 	@JoinColumn(name="restaurant_menu_id")
@@ -59,5 +65,11 @@ public class RestaurantCategory {
 
 	public void setRestaurantMenu(RestaurantMenu restaurantMenu) {
 		this.restaurantMenu = restaurantMenu;
+	}
+	public List<RestaurantFood> getFoods() {
+		return foods;
+	}
+	public void setFoods(List<RestaurantFood> foods) {
+		this.foods = foods;
 	}
 }

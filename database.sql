@@ -513,6 +513,9 @@ CREATE TABLE `restaurant_foods` (
   `name` varchar(255) DEFAULT NULL,
   `restaurant_category_id` bigint(20) DEFAULT NULL,
   `restaurant_menu_id` bigint(20) DEFAULT NULL,
+  `discount` float DEFAULT NULL,
+  `price` float DEFAULT NULL,
+  `customizable` bit(1) DEFAULT NULL,
   PRIMARY KEY (`restaurant_food_id`),
   KEY `FKom57go5i8kqdddridn6g933wu` (`restaurant_category_id`),
   KEY `FK228ute1iyitu0ml7cvgeejojd` (`restaurant_menu_id`)
@@ -525,7 +528,7 @@ CREATE TABLE `restaurant_foods` (
 
 LOCK TABLES `restaurant_foods` WRITE;
 /*!40000 ALTER TABLE `restaurant_foods` DISABLE KEYS */;
-INSERT INTO `restaurant_foods` VALUES (1,'Shahi Paneer',1,2),(2,'Chiili Paneer',1,2),(3,'Kadhai Paneer',1,2),(4,'Kadhai Chicken',2,2),(5,'Butter Chicken',2,2),(6,'Veg Thali',NULL,5),(7,'Non Veg Thali',NULL,5),(8,'Spl. Non Veg Thali',NULL,5),(9,'Dal + Rice',NULL,3),(10,'Kadhai + Rice',NULL,3);
+INSERT INTO `restaurant_foods` VALUES (1,'Shahi Paneer',1,2,0,10,''),(2,'Chiili Paneer',1,2,0,10,''),(3,'Kadhai Paneer',1,2,0,10,''),(4,'Kadhai Chicken',2,2,0,10,''),(5,'Butter Chicken',2,2,0,10,''),(6,'Veg Thali',NULL,5,0,10,''),(7,'Non Veg Thali',NULL,5,0,10,''),(8,'Spl. Non Veg Thali',NULL,5,0,10,''),(9,'Dal + Rice',NULL,3,0,10,''),(10,'Kadhai + Rice',NULL,3,0,10,'');
 /*!40000 ALTER TABLE `restaurant_foods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -657,6 +660,7 @@ CREATE TABLE `restaurants` (
   `name` varchar(255) NOT NULL,
   `price_for_two` float DEFAULT NULL,
   `rating` float DEFAULT NULL,
+  `delivery_time` int(11) NOT NULL,
   PRIMARY KEY (`restaurant_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -667,7 +671,7 @@ CREATE TABLE `restaurants` (
 
 LOCK TABLES `restaurants` WRITE;
 /*!40000 ALTER TABLE `restaurants` DISABLE KEYS */;
-INSERT INTO `restaurants` VALUES (1,'erererere ','2019-01-08 16:01:44',NULL,30.712463,76.845615,'My Restaurant',0,0);
+INSERT INTO `restaurants` VALUES (1,'erererere ','2019-01-08 16:01:44',NULL,30.712463,76.845615,'My Restaurant',0,0,0);
 /*!40000 ALTER TABLE `restaurants` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -694,6 +698,30 @@ LOCK TABLES `restaurants_cuisines` WRITE;
 /*!40000 ALTER TABLE `restaurants_cuisines` DISABLE KEYS */;
 INSERT INTO `restaurants_cuisines` VALUES (1,1),(1,2),(1,3),(1,4),(1,5);
 /*!40000 ALTER TABLE `restaurants_cuisines` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `restaurants_menus`
+--
+
+DROP TABLE IF EXISTS `restaurants_menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `restaurants_menus` (
+  `restaurant_restaurant_id` bigint(20) NOT NULL,
+  `menus_restaurant_menu_id` bigint(20) NOT NULL,
+  UNIQUE KEY `UK_9b152ryemquxe5i3gpee5d13n` (`menus_restaurant_menu_id`),
+  KEY `FKq59uj04qf6ted74tpj3gwquql` (`restaurant_restaurant_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `restaurants_menus`
+--
+
+LOCK TABLES `restaurants_menus` WRITE;
+/*!40000 ALTER TABLE `restaurants_menus` DISABLE KEYS */;
+/*!40000 ALTER TABLE `restaurants_menus` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -783,4 +811,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-10 18:32:01
+-- Dump completed on 2019-01-14 18:22:54

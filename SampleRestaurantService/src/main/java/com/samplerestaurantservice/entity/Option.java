@@ -29,11 +29,18 @@ public class Option {
 	public Option(long id) {
 		this.id = id;
 	}
+	
+	// Copy Constructors
+	public Option(Option option) {
+		this(option.getId());
+		this.name = option.getName();
+		this.optionType = new OptionType(option.getOptionType());
+	}
 
 	public long getId() {
 		return id;
 	}
-
+	
 	public void setId(long id) {
 		this.id = id;
 	}

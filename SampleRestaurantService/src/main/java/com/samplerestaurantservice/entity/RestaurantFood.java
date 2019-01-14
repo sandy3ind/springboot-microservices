@@ -28,7 +28,7 @@ public class RestaurantFood {
 	private float discount;
 	
 	@Column(name="customizable")
-	private boolean customizable;
+	private boolean customizable = false;
 	
 	@ManyToOne
 	@JoinColumn(name="restaurant_category_id")
@@ -49,7 +49,7 @@ public class RestaurantFood {
 		this.setName(restaurantFood.getName());
 		this.setDiscount(restaurantFood.getDiscount());
 		this.setCustomizable(restaurantFood.isCustomizable());
-		//this.setRestaurantCategory(restaurantCategory);
+		this.setRestaurantCategory(restaurantCategory);
 		//this.setRestaurantMenu(restaurantMenu);
 	}
 

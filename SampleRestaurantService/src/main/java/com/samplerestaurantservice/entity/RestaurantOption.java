@@ -15,7 +15,7 @@ public class RestaurantOption {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="restaurant_option_id")
-	private int id;	
+	private long id;	
 	
 	@OneToOne
 	@JoinColumn(name="option_id")
@@ -24,12 +24,25 @@ public class RestaurantOption {
 	@OneToOne
 	@JoinColumn(name="restaurant_option_type_id")
 	private RestaurantOptionType restaurantOptionType;
+	
+	// Constructors
+	public RestaurantOption() {}
+	public RestaurantOption(long id) {		
+		this.id = id;
+	}
+	
+	// Copy Constructor
+	public RestaurantOption(RestaurantOption restaurantOption) {
+		this(restaurantOption.getId());		
+		this.option = new Option(restaurantOption.getOption());
+		this.restaurantOptionType = new RestaurantOptionType(restaurantOption.getRestaurantOptionType());
+	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

@@ -32,7 +32,21 @@ public class RestaurantFoodOption {
 	@OneToOne
 	@JoinColumn(name="restaurant_option_id")	
 	private RestaurantOption restaurantOption;
-
+	
+	// Constructors
+	public RestaurantFoodOption() {}
+	public RestaurantFoodOption(long id) {		
+		this.id = id;
+	}
+	
+	// Copy Constructor
+	public RestaurantFoodOption(RestaurantFoodOption restaurantFoodOption) {
+		this(restaurantFoodOption.getId());
+		this.price = restaurantFoodOption.getPrice();
+		this.discount = restaurantFoodOption.getDiscount();
+		this.restaurantFood = new RestaurantFood(restaurantFoodOption.getRestaurantFood());
+		this.restaurantOption = new RestaurantOption(restaurantFoodOption.getRestaurantOption());
+	}
 	public long getId() {
 		return id;
 	}

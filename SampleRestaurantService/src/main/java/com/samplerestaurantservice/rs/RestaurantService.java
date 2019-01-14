@@ -203,7 +203,9 @@ public class RestaurantService {
 		if (categories != null) {
 			List<RestaurantCategory> newCategories = categories.stream()
 					.map(category -> {
-						return new RestaurantCategory(category);
+						RestaurantCategory restaurantCategory = new RestaurantCategory(category);
+						setRestaurantCategoryFoods(restaurantCategory);
+						return restaurantCategory;
 					}).collect(Collectors.toList());
 			restaurantMenu.setCategories(newCategories);
 		}
@@ -225,4 +227,23 @@ public class RestaurantService {
 			restaurantMenu.setFoods(newFoods);
 		}
 	}
+	
+	/**
+	 * Set RestaurantFoods to RestaurantCategory
+	 * 
+	 * @param restaurantCategory
+	 */
+	private void setRestaurantCategoryFoods(RestaurantCategory restaurantCategory) {
+		// Fetch all the RestaurantFoods of the RestaurantCategory
+		List<RestaurantFood> foods = restaurantFoodRepository.findByRestaurantCategory(restaurantCategory);
+		if (foods != null) {
+			List<RestaurantFood> newFoods = foods.stream()
+					.map(food -> {
+						return new RestaurantFood(food);
+					}).collect(Collectors.toList());
+			restaurantCategory.setFoods(newFoods);
+		}
+	}
+	
+	
 }

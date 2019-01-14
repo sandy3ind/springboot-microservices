@@ -1,6 +1,7 @@
 package com.samplerestaurantservice.entity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +31,19 @@ public class OptionType {
 	public OptionType(long id) {
 		this.id = id;
 	}
-
+	
+	// Copy Constructor
+	public OptionType(OptionType optionType) {
+		this(optionType.getId());
+		this.name = optionType.getName();
+		
+		if (optionType.getOptions() != null && !optionType.getOptions().isEmpty()) {
+			this.options = optionType.getOptions().stream()
+					.map(op -> {
+						return new Option(op);
+					}).collect(Collectors.toList());
+		}
+	}
 	public long getId() {
 		return id;
 	}

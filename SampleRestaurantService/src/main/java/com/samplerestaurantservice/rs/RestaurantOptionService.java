@@ -1,5 +1,6 @@
 package com.samplerestaurantservice.rs;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,14 @@ public class RestaurantOptionService {
 	@Autowired
 	private RestaurantOptionRepository restaurantOptionRepository;
 	
+	/**
+	 * Save Restaurant Food Options
+	 * 
+	 * @param restaurantId
+	 * @param restaurantOption
+	 * @param errors
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<?> save(
 			@PathVariable("restaurantId") long restaurantId,
@@ -54,6 +63,6 @@ public class RestaurantOptionService {
 		restaurantOptionRepository.save(restaurantOption);
 		
 		return ResponseEntity.ok().build();
-	}	
+	}
 	
 }
