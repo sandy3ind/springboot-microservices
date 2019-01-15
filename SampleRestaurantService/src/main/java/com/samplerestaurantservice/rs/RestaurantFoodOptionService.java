@@ -58,8 +58,12 @@ public class RestaurantFoodOptionService {
 	}	
 	
 	
-	
-	
+	/**
+	 * Get Restaurant Options
+	 * 
+	 * @param restaurantFoodId
+	 * @return
+	 */	
 	@GetMapping
 	public ResponseEntity<?> getOptions(
 			@PathVariable("restaurantFoodId") long restaurantFoodId) {

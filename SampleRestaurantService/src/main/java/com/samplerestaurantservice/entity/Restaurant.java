@@ -67,8 +67,11 @@ public class Restaurant {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="restaurant")
 	private List<RestaurantMenu> menus;
 	
-	
+	@Column(name="delivery_time")
 	private int deliveryTime;
+	
+	@Column(name="packaging_charge")
+	private float packagingCharge;
 	
 	@Transient
 	private double distance;
@@ -209,6 +212,14 @@ public class Restaurant {
 
 	public void setMenus(List<RestaurantMenu> menus) {
 		this.menus = menus;
+	}
+
+	public float getPackagingCharge() {
+		return packagingCharge;
+	}
+
+	public void setPackagingCharge(float packagingCharge) {
+		this.packagingCharge = packagingCharge;
 	}
 	
 }

@@ -1,9 +1,9 @@
 package com.samplerestaurantservice.entity;
 
-public class RestaurantFoodChoice {
+public class RestaurantFoodAddOnItem {
 
 	private long id;
 	
 	private RestaurantFood restaurantFood;
-	private RestaurantAddOn restaurantChoice;
+	private RestaurantAddOnItem restaurantAddOnItem;
 }
