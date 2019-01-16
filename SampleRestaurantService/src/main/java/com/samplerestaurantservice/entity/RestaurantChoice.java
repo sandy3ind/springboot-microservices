@@ -29,7 +29,7 @@ public class RestaurantChoice {
 	private Choice choice;
 	
 	@OneToMany(mappedBy="restaurantChoice")
-	private List<RestaurantChoice> choices;
+	private List<RestaurantChoiceItem> choiceItems;
 
 	// Constructors
 	public RestaurantChoice() {}
@@ -60,14 +60,10 @@ public class RestaurantChoice {
 	public void setChoice(Choice choice) {
 		this.choice = choice;
 	}
-	public List<RestaurantChoice> getChoices() {
-		return choices;
+	public List<RestaurantChoiceItem> getChoiceItems() {
+		return choiceItems;
 	}
-	public void setChoices(List<RestaurantChoice> choices) {
-		this.choices = choices;
+	public void setChoiceItems(List<RestaurantChoiceItem> choiceItems) {
+		this.choiceItems = choiceItems;
 	}
-	
-	
-	
-	
 }

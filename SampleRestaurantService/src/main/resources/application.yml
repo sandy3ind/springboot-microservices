@@ -8,3 +8,9 @@ spring:
     url:  jdbc:mysql://localhost:3306/sample
     username: root
     password: root
+#  cache:
+#    type: redis
+#  redis:
+#    host: localhost
+#    port: 6379
+    

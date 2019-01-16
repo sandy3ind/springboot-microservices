@@ -5,4 +5,8 @@ public class Constant {
 	public enum ErrorType {
 		VALIDATION, NON_UNIQUE
 	}
+	
+	public enum UpdateQuantityType {
+		PLUS, MINUS
+	}
 }
