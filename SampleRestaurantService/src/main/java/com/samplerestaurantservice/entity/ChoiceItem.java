@@ -20,6 +20,9 @@ public class ChoiceItem {
 	@ManyToOne
 	@JoinColumn(name="choice_id")
 	private Choice choice;
+	
+	@Column(name="name")
+	private String name;
 
 	// Constructors
 	public ChoiceItem() {}
@@ -38,5 +41,11 @@ public class ChoiceItem {
 	}
 	public void setChoice(Choice choice) {
 		this.choice = choice;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

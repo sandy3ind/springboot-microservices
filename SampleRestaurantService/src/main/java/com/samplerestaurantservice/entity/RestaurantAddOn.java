@@ -25,7 +25,7 @@ public class RestaurantAddOn {
 	private Restaurant restaurant;
 	
 	@ManyToOne
-	@JoinColumn(name="_id")
+	@JoinColumn(name="add_on_id")
 	private AddOn addOn;
 	
 	@OneToMany(mappedBy="restaurantAddOn")

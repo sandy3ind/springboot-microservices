@@ -18,8 +18,6 @@ public class RestaurantChoiceItem {
 	@Column(name="restaurant_choice_item_id")
 	private long id;
 	
-	@Column(name="price")
-	private float price;
 	
 	@ManyToOne
 	@JoinColumn(name="restaurant_choice_id")
@@ -41,12 +39,6 @@ public class RestaurantChoiceItem {
 	}
 	public void setId(long id) {
 		this.id = id;
-	}
-	public float getPrice() {
-		return price;
-	}
-	public void setPrice(float price) {
-		this.price = price;
 	}
 	public RestaurantChoice getRestaurantChoice() {
 		return restaurantChoice;

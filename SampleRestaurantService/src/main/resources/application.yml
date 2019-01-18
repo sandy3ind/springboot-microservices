@@ -4,10 +4,21 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
   datasource:
     url:  jdbc:mysql://localhost:3306/sample
     username: root
     password: root
+    
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+        
 #  cache:
 #    type: redis
 #  redis:
