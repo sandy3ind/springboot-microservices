@@ -196,10 +196,14 @@ public class CartCacheService {
 	public void calculateCartTotalPrice(Cart cart) {		
 		List<CartFood> cartFoods = cart.getCartFoods();	
 		cart.setTotalPrice(0); // Reset before calculating - to remove previous cached price
+		cart.setFinalPrice(0);
 		cartFoods.forEach(cartFood -> {			
-			calculateCartFoodTotalPrice(cartFood);
+			calculateCartFoodPrice(cartFood);
 			cart.setTotalPrice(cart.getTotalPrice() + cartFood.getTotalPrice());
+			cart.setFinalPrice(cart.getFinalPrice() + cartFood.getFinalPrice());			
 		});		
+		// Set total discount
+		cart.setDiscount(cart.getTotalPrice() - cart.getFinalPrice());
 	}
 	
 	/**
@@ -207,18 +211,20 @@ public class CartCacheService {
 	 * 
 	 * @param cartFood
 	 */
-	public void calculateCartFoodTotalPrice(CartFood cartFood) {
+	public void calculateCartFoodPrice(CartFood cartFood) {
 		cartFood.setTotalPrice(0); // Reset before calculating - to remove previous cached price
+		cartFood.setFinalPrice(0);
 		// If FoodOption is there then get its price
 		if (cartFood.getRestaurantFoodOption() != null && cartFood.getRestaurantFoodOption().getId() > 0) {
 			RestaurantFoodOption restaurantFoodOption = restaurantFoodOptionRepository.findById(cartFood.getRestaurantFoodOption().getId()).get();				
 			cartFood.setTotalPrice(cartFood.getTotalPrice() + restaurantFoodOption.getPrice());
-			
+			cartFood.setDiscount(restaurantFoodOption.getDiscount());
 		}
 		else {
 			// If Food Option is not there, then get price of Food only
 			RestaurantFood restaurantFood = restaurantFoodRepository.findById(cartFood.getRestaurantFood().getId()).get();				
 			cartFood.setTotalPrice(cartFood.getTotalPrice() + restaurantFood.getPrice());
+			cartFood.setDiscount(restaurantFood.getDiscount());
 		}
 		// Add prices of any AddOns
 		List<RestaurantFoodAddOnItem> addOnItems = cartFood.getRestaurantFoodAddOnItems();
@@ -237,11 +243,14 @@ public class CartCacheService {
 			cartFood.setTotalPrice(cartFood.getTotalPrice() + optional.get().getPrice());
 		}
 		
-		//TODO - Multiply totalPrice with quantity
+		//Multiply totalPrice with quantity
 		cartFood.setTotalPrice(cartFood.getTotalPrice() * cartFood.getQuantity());
 		
 		//TODO - Minus any discount applied on the Food
-		
+		float totalPrice = cartFood.getTotalPrice();
+		float discount = cartFood.getDiscount() * cartFood.getQuantity();
+		float finalPrice = totalPrice - discount;
+		cartFood.setFinalPrice(finalPrice);
 	}
 	
 }

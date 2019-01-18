@@ -9,4 +9,8 @@ public class Constant {
 	public enum UpdateQuantityType {
 		PLUS, MINUS
 	}
+	
+	public enum OrderStatus {
+		
+	}
 }

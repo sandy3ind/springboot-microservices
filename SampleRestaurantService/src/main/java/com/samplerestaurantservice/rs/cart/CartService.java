@@ -87,6 +87,8 @@ public class CartService {
 		List<CartFood> cartFoods = cachedCart.getCartFoods();	
 		
 		// Iterate over CartFoods
+		cachedCart.setTotalPrice(0); // Reset before calculating - to remove previous cached price
+		cachedCart.setFinalPrice(0);
 		if (cartFoods != null && !cartFoods.isEmpty()) {			
 			cartFoods.forEach(cartFood -> {
 				// Save CartFood - AddOnItems relation if exists
@@ -99,13 +101,20 @@ public class CartService {
 					cartFood.setRestaurantFoodAddOnItems(newAddOnItems);
 				}
 				// Add CartFood Total price
-				cartCacheService.calculateCartFoodTotalPrice(cartFood);
+				cartCacheService.calculateCartFoodPrice(cartFood);
+				cachedCart.setTotalPrice(cachedCart.getTotalPrice() + cartFood.getTotalPrice());
+				cachedCart.setFinalPrice(cachedCart.getFinalPrice() + cartFood.getFinalPrice());
 			});
-		}		
+		}	
+		// Set total discount
+		cachedCart.setDiscount(cachedCart.getTotalPrice() - cachedCart.getFinalPrice());
 		
 		// HACK - Update Cart in the CartFood - somehow cart_id is not being updated in cart_food table 
 		cachedCart.getCartFoods().forEach(cartFood -> cartFood.setCart(cachedCart));
 		cartRepository.save(cachedCart);
+		
+		
+		
 		
 		return ResponseEntity.ok().build();
 	}

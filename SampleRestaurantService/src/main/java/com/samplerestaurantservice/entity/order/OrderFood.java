@@ -1,4 +1,4 @@
-package com.samplerestaurantservice.entity.cart;
+package com.samplerestaurantservice.entity.order;
 
 import java.util.List;
 
@@ -16,18 +16,18 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.samplerestaurantservice.entity.RestaurantFood;
 import com.samplerestaurantservice.entity.RestaurantFoodAddOnItem;
 import com.samplerestaurantservice.entity.RestaurantFoodChoiceItem;
 import com.samplerestaurantservice.entity.RestaurantFoodOption;
+import com.samplerestaurantservice.entity.cart.Cart;
 
 @Entity
-@Table(name="cart_foods")
-public class CartFood {
-	
+@Table(name="order_foods")
+public class OrderFood {
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="cart_food_id")
+	@Column(name="order_food_id")
 	private long id;	
 
 	@OneToOne
@@ -41,8 +41,8 @@ public class CartFood {
 	//@JsonManagedReference
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     @JoinTable(
-        name = "cart_food_add_on_items", 
-        joinColumns = { @JoinColumn(name = "cart_food_id") }, 
+        name = "order_food_add_on_items", 
+        joinColumns = { @JoinColumn(name = "order_food_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "restaurant_food_add_on_item_id") }
     )
 	private List<RestaurantFoodAddOnItem> restaurantFoodAddOnItems;
@@ -58,15 +58,12 @@ public class CartFood {
 	private float totalPrice;	
 	
 	@Column(name="final_Price")
-	private float finalPrice;
-
-	@Column(name="discount")
-	private float discount;
+	private float finalPrice;	
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="cart_id")
-	private Cart cart;
+	@JoinColumn(name="order_id")
+	private Order order;
 
 	public long getId() {
 		return id;
@@ -119,7 +116,11 @@ public class CartFood {
 	public float getTotalPrice() {
 		return totalPrice;
 	}
-	
+
+	public void setTotalPrice(float totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
 	public float getFinalPrice() {
 		return finalPrice;
 	}
@@ -128,23 +129,12 @@ public class CartFood {
 		this.finalPrice = finalPrice;
 	}
 
-	public void setTotalPrice(float totalPrice) {
-		this.totalPrice = totalPrice;
+	public Order getOrder() {
+		return order;
 	}
 
-	public Cart getCart() {
-		return cart;
+	public void setOrder(Order order) {
+		this.order = order;
 	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-
-	public float getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(float discount) {
-		this.discount = discount;
-	}
+	
 }
