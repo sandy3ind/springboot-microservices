@@ -11,6 +11,6 @@ public class Constant {
 	}
 	
 	public enum OrderStatus {
-		
+		NEW
 	}
 }

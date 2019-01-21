@@ -2,28 +2,20 @@ package com.samplerestaurantservice.rs.cart;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.util.concurrent.AtomicDouble;
-import com.samplerestaurantservice.entity.RestaurantFood;
+import com.samplerestaurantservice.entity.Restaurant;
 import com.samplerestaurantservice.entity.RestaurantFoodAddOnItem;
-import com.samplerestaurantservice.entity.RestaurantFoodChoiceItem;
-import com.samplerestaurantservice.entity.RestaurantFoodOption;
 import com.samplerestaurantservice.entity.cart.Cart;
 import com.samplerestaurantservice.entity.cart.CartFood;
 import com.samplerestaurantservice.entity.user.User;
@@ -33,7 +25,6 @@ import com.samplerestaurantservice.respository.RestaurantFoodOptionRepository;
 import com.samplerestaurantservice.respository.RestaurantFoodRepository;
 import com.samplerestaurantservice.respository.cart.CartFoodRepository;
 import com.samplerestaurantservice.respository.cart.CartRepository;
-import com.samplerestaurantservice.util.Constant.UpdateQuantityType;
 
 @RestController
 @RequestMapping("/cart")
@@ -65,10 +56,11 @@ public class CartService {
 	
 	
 		
-	@PostMapping(value = "/user/{userId}")
+	@PostMapping(value = "restaurant/{restaurantId}/user/{userId}")
 	@Transactional
 	public ResponseEntity<?> saveCart(
-			@PathVariable("userId") long userId) {
+			@PathVariable("userId") long userId,
+			@PathVariable("restaurantId") long restaurantId) {
 		
 		// Get Cached Cart of this user
 		Cart cachedCart = cartCache.getCart(userId);
@@ -109,12 +101,11 @@ public class CartService {
 		// Set total discount
 		cachedCart.setDiscount(cachedCart.getTotalPrice() - cachedCart.getFinalPrice());
 		
+		cachedCart.setRestaurant(new Restaurant(restaurantId));
+		
 		// HACK - Update Cart in the CartFood - somehow cart_id is not being updated in cart_food table 
 		cachedCart.getCartFoods().forEach(cartFood -> cartFood.setCart(cachedCart));
 		cartRepository.save(cachedCart);
-		
-		
-		
 		
 		return ResponseEntity.ok().build();
 	}

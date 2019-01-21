@@ -13,7 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.samplerestaurantservice.entity.cart.CartFood;
+import com.samplerestaurantservice.entity.Restaurant;
+import com.samplerestaurantservice.entity.cart.Cart;
 import com.samplerestaurantservice.entity.user.User;
 import com.samplerestaurantservice.util.Constant;
 
@@ -27,7 +28,11 @@ public class Order {
 	
 	@OneToOne
 	@JoinColumn(name="user_id")
-	private User user;	
+	private User user;
+	
+	@OneToOne
+	@JoinColumn(name="restaurant_id")
+	private Restaurant restaurant;
 
 	@OneToMany(mappedBy="order", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE })
 	private List<OrderFood> orderFoods;
@@ -43,6 +48,16 @@ public class Order {
 	
 	@Column(name="status")
 	private Constant.OrderStatus status;
+	
+	// Builder Order from Cart
+	public Order buildOrderFromCart(Cart cart) {
+		this.setDiscount(cart.getDiscount());
+		this.setFinalPrice(cart.getFinalPrice());
+		this.setTotalPrice(cart.getTotalPrice());
+		this.setUser(cart.getUser());
+		this.setRestaurant(cart.getRestaurant());
+		return this;
+	}
 
 	public long getId() {
 		return id;
@@ -98,6 +113,14 @@ public class Order {
 
 	public void setStatus(Constant.OrderStatus status) {
 		this.status = status;
+	}
+
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.samplerestaurantservice.entity.order;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,6 +22,7 @@ import com.samplerestaurantservice.entity.RestaurantFoodAddOnItem;
 import com.samplerestaurantservice.entity.RestaurantFoodChoiceItem;
 import com.samplerestaurantservice.entity.RestaurantFoodOption;
 import com.samplerestaurantservice.entity.cart.Cart;
+import com.samplerestaurantservice.entity.cart.CartFood;
 
 @Entity
 @Table(name="order_foods")
@@ -65,6 +67,28 @@ public class OrderFood {
 	@JoinColumn(name="order_id")
 	private Order order;
 
+	// Build OrderFood from CartFood
+	public OrderFood buildOrderFoodFromCartFood(CartFood cartFood) {
+		this.setFinalPrice(cartFood.getFinalPrice());
+		this.setQuantity(cartFood.getQuantity());
+		this.setRestaurantFood(cartFood.getRestaurantFood());
+		this.setRestaurantFoodOption(cartFood.getRestaurantFoodOption());		
+		this.setTotalPrice(cartFood.getTotalPrice());
+		this.setRestaurantFoodChoiceItem(cartFood.getRestaurantFoodChoiceItem());
+		// Create new copies of AddOnItmes
+		List<RestaurantFoodAddOnItem> addOnItems = cartFood.getRestaurantFoodAddOnItems();
+		if (addOnItems != null && !addOnItems.isEmpty()) {
+			if (this.getRestaurantFoodAddOnItems() == null) {
+				this.setRestaurantFoodAddOnItems(new ArrayList<>(addOnItems.size()));
+			}
+			addOnItems.forEach(item -> {
+				this.getRestaurantFoodAddOnItems().add(item);
+			});
+		}
+		return this;
+	}
+	
+	
 	public long getId() {
 		return id;
 	}

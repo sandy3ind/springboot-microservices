@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.samplerestaurantservice.entity.Restaurant;
 import com.samplerestaurantservice.entity.user.User;
 
 @Entity
@@ -29,6 +30,10 @@ public class Cart {
 	@OneToOne
 	@JoinColumn(name="user_id")
 	private User user;
+	
+	@OneToOne
+	@JoinColumn(name="restaurant_id")
+	private Restaurant restaurant;
 	
 	//@JsonBackReference
 	@OneToMany(mappedBy="cart", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE })
@@ -85,5 +90,11 @@ public class Cart {
 	}
 	public void setDiscount(float discount) {
 		this.discount = discount;
+	}
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}	
 }
