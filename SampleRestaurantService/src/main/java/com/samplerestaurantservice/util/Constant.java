@@ -13,4 +13,8 @@ public class Constant {
 	public enum OrderStatus {
 		NEW
 	}
+	
+	public enum AddressType {
+		HOME, OFFICE, OTHER
+	}
 }

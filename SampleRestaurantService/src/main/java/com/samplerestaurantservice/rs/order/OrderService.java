@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import com.samplerestaurantservice.entity.cart.CartFood;
 import com.samplerestaurantservice.entity.order.Order;
 import com.samplerestaurantservice.entity.order.OrderFood;
 import com.samplerestaurantservice.respository.cart.CartRepository;
+import com.samplerestaurantservice.respository.order.OrderFoodRepository;
 import com.samplerestaurantservice.respository.order.OrderRepository;
 import com.samplerestaurantservice.util.Constant.OrderStatus;
 
@@ -28,6 +31,9 @@ public class OrderService {
 	
 	@Autowired
 	private OrderRepository orderRepository;
+	
+	@Autowired
+	private OrderFoodRepository orderFoodRepository;
 
 	/**
 	 * Place Order from Cart
@@ -35,6 +41,7 @@ public class OrderService {
 	 * @return
 	 */
 	@PostMapping("/cart/{cartId}")
+	@Transactional
 	public ResponseEntity<?> save(
 			@PathVariable("cartId") long cartId) {
 		
@@ -46,18 +53,18 @@ public class OrderService {
 			return ResponseEntity.badRequest().body("Cart not found");
 		}
 		Cart cart = cartOptional.get();
-		Order order = new Order();;
+		final Order order = new Order();;
 		
 		// Check if Order already exists in DB, then update only data
 		Order orderDb = orderRepository.findByUserAndRestaurantAndStatus(cart.getUser(), cart.getRestaurant(), OrderStatus.NEW);
 		if (orderDb != null) {
 			order.setId(orderDb.getId());
+			// delete all the existing OrderFoods
+			deleteOrderFoods(orderDb.getOrderFoods());
 		}			
 		
 		// Copy Order detail from Cart
-		order = order.buildOrderFromCart(cart);
-		
-		// TODO - delete all the existing OrderFoods
+		order.buildOrderFromCart(cart);			
 		
 		// Copy all the CartFood to OrderFood
 		List<CartFood> cartFoods = cart.getCartFoods();
@@ -66,6 +73,7 @@ public class OrderService {
 			cartFoods.forEach(cartFood -> {
 				OrderFood orderFood = new OrderFood();
 				orderFood = orderFood.buildOrderFoodFromCartFood(cartFood);
+				orderFood.setOrder(order);
 				orderFoods.add(orderFood);
 			});
 			order.setOrderFoods(orderFoods);
@@ -75,4 +83,19 @@ public class OrderService {
 		
 		return ResponseEntity.ok().build();
 	}
+	
+	/**
+	 * Delete all the OrderFoods of Order
+	 * 
+	 * @param orderFoods
+	 */
+	private void deleteOrderFoods(List<OrderFood> orderFoods) {
+		if (orderFoods != null && !orderFoods.isEmpty()) {
+			orderFoods.forEach(orderFood -> {
+				orderFood.setRestaurantFoodAddOnItems(null);
+				orderFoodRepository.delete(orderFood);
+			});
+		}
+	}
+	
 }
