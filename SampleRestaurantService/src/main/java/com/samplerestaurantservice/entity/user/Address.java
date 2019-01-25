@@ -35,9 +35,6 @@ public class Address {
 	@Column(name="pincode")
 	private String pincode;
 	
-	@Column(name="type")
-	private AddressType type;
-
 	public long getId() {
 		return id;
 	}
@@ -92,13 +89,5 @@ public class Address {
 
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
-	}
-
-	public AddressType getType() {
-		return type;
-	}
-
-	public void setType(AddressType type) {
-		this.type = type;
 	}
 }
