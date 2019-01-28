@@ -19,6 +19,10 @@ logging:
       hibernate:
         type: trace
         
+FCM:
+  service:
+    url:  http://localhost:8888
+        
 #  cache:
 #    type: redis
 #  redis:

@@ -45,11 +45,7 @@ public class Restaurant {
 	
 	@Column(name="price_for_two")
 	private float priceForTwo;
-	
-	@NotNull(message="Address must not be empty")
-	@Column(name="address")
-	private String address;
-		
+			
 	@Column(name="latitude")
 	private double latitude;	
 	
@@ -92,8 +88,7 @@ public class Restaurant {
 		this.description = restaurant.getDescription();
 		this.createdDate = restaurant.getCreatedDate();
 		this.rating = restaurant.getRating();
-		this.priceForTwo = restaurant.getPriceForTwo();
-		this.address = restaurant.getAddress();
+		this.priceForTwo = restaurant.getPriceForTwo();		
 		this.latitude = restaurant.getLatitude();
 		this.longitude = restaurant.getLongitude();
 		this.deliveryTime = restaurant.getDeliveryTime();
@@ -156,14 +151,6 @@ public class Restaurant {
 
 	public void setPriceForTwo(float priceForTwo) {
 		this.priceForTwo = priceForTwo;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public double getLatitude() {

@@ -11,7 +11,7 @@ public class Constant {
 	}
 	
 	public enum OrderStatus {
-		NEW
+		NEW, ACCEPTED, REJECTED, PREPARING, ON_WAY, DELIVERED
 	}
 	
 	public enum AddressType {

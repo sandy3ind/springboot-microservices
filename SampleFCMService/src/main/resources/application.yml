@@ -1,0 +1,16 @@
+server:
+  port: 8888 
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url:  jdbc:mysql://localhost:3306/sample
+    username: root
+    password: root
+    
+FCM:
+  url: https://fcm.googleapis.com/fcm/send
+  server:
+    key: AAAAxQaUyj8:APA91bG3xxn_jiM22731GfpLIiVLUPkS5G1PIwWJ--zefDUEC8dodJAk5hXyWU7J96sKIc9e-1FXwIe364oQfFyDzPz8B6I-FhNo0Pu1iJB2mW4S1eoRy_S5BfxomK7gnR-bsIwUH1Du 
+    

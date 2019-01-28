@@ -59,6 +59,12 @@ public class User {
     )
 	private List<Role> roles;
 	
+	// Constructors
+	public User() {}
+	public User(long id) {
+		this.id = id;
+	}
+	
 	public long getId() {
 		return id;
 	}

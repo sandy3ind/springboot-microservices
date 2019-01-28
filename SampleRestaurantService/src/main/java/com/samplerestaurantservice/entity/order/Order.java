@@ -48,6 +48,10 @@ public class Order {
 	
 	@Column(name="status")
 	private Constant.OrderStatus status;
+
+	@OneToOne
+	@JoinColumn(name="order_rejection_reason_id")
+	private OrderRejectionReason orderRejectionReason;
 	
 	// Builder Order from Cart
 	public Order buildOrderFromCart(Cart cart) {
@@ -121,6 +125,14 @@ public class Order {
 
 	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
+	}
+
+	public OrderRejectionReason getOrderRejectionReason() {
+		return orderRejectionReason;
+	}
+
+	public void setOrderRejectionReason(OrderRejectionReason orderRejectionReason) {
+		this.orderRejectionReason = orderRejectionReason;
 	}
 	
 }

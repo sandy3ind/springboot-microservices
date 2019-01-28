@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sampleuserservice.entity.Device;
 import com.sampleuserservice.entity.Role;
 import com.sampleuserservice.entity.User;
+import com.sampleuserservice.repository.DeviceRepository;
 import com.sampleuserservice.repository.RoleRepository;
 import com.sampleuserservice.repository.UserRepository;
 import com.sampleuserservice.util.Constant.ErrorType;
@@ -39,6 +41,9 @@ public class UserService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private DeviceRepository deviceRepository;
 	
 	/**
 	 * Save User
@@ -119,6 +124,33 @@ public class UserService {
 		}
 		
 		return ResponseEntity.notFound().build();
+	}
+	
+	/**
+	 * Save/Update User's device FCM token - will be need to send FCM notification to user's device
+	 * 
+	 * @param userId
+	 * @param token
+	 * @return
+	 */
+	@PostMapping("{userId}/fcm/{token}")
+	public ResponseEntity<?> registerFcm(
+			@PathVariable("userId") long userId,
+			@PathVariable("token") String token) {
+		
+		Device device = deviceRepository.findByUser(new User(userId));
+		
+		if (device != null) {
+			device.setFcmToken(token);
+		}
+		else {
+			device = new Device();
+			device.setFcmToken(token);
+			device.setUser(new User(userId));
+		}
+		deviceRepository.save(device);
+		
+		return ResponseEntity.ok().build();
 	}
 	
 
