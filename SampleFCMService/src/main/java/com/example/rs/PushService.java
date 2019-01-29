@@ -32,6 +32,12 @@ public class PushService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	/**
+	 * Push notification Android device
+	 * 
+	 * @param fcmData
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<?> push(
 			@RequestBody FcmData fcmData) {

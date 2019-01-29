@@ -23,6 +23,8 @@ import com.samplerestaurantservice.respository.cart.CartRepository;
 import com.samplerestaurantservice.respository.order.OrderFoodRepository;
 import com.samplerestaurantservice.respository.order.OrderRejectionReasonRepository;
 import com.samplerestaurantservice.respository.order.OrderRepository;
+import com.samplerestaurantservice.rsclient.FCMClient;
+import com.samplerestaurantservice.rsclient.FcmData;
 import com.samplerestaurantservice.util.Constant.OrderStatus;
 
 @RestController
@@ -40,6 +42,10 @@ public class OrderService {
 	
 	@Autowired
 	private OrderRejectionReasonRepository orderRejectionReasonRepository;
+	
+	@Autowired
+	private FCMClient fcmClient;
+	
 
 	/**
 	 * Place Order from Cart
@@ -68,6 +74,10 @@ public class OrderService {
 			order.setId(orderDb.getId());
 			// delete all the existing OrderFoods
 			deleteOrderFoods(orderDb.getOrderFoods());
+		}
+		else {
+			// TODO - Generate Ref no
+			order.setRef("ewew33223ewe");
 		}
 
 		// Copy Order detail from Cart
@@ -129,7 +139,13 @@ public class OrderService {
 		orderRepository.save(order);
 
 		// TODO - Send order status notification to Customer
-
+		FcmData fcmData = new FcmData();
+		fcmData.setToken("dfdfd");
+		fcmData.getNotification().put("title", "dsdsdsd");
+		fcmData.getData().put("title", "data title");
+		fcmClient.sendOrderStatus(fcmData);
+		
+		
 		return ResponseEntity.ok().build();
 	}
 

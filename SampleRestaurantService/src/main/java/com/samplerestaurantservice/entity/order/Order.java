@@ -48,6 +48,9 @@ public class Order {
 	
 	@Column(name="status")
 	private Constant.OrderStatus status;
+	
+	@Column(name="ref")
+	private String ref;
 
 	@OneToOne
 	@JoinColumn(name="order_rejection_reason_id")
@@ -133,6 +136,14 @@ public class Order {
 
 	public void setOrderRejectionReason(OrderRejectionReason orderRejectionReason) {
 		this.orderRejectionReason = orderRejectionReason;
+	}
+
+	public String getRef() {
+		return ref;
+	}
+
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
 	
 }

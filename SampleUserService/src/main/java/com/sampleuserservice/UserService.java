@@ -127,7 +127,7 @@ public class UserService {
 	}
 	
 	/**
-	 * Save/Update User's device FCM token - will be need to send FCM notification to user's device
+	 * Save/Update User's device FCM token - will be needed to send FCM notification to user's device
 	 * 
 	 * @param userId
 	 * @param token
@@ -151,6 +151,25 @@ public class UserService {
 		deviceRepository.save(device);
 		
 		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	 * Get user FCM token from database
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@GetMapping("{userId}/fcm-token")
+	public ResponseEntity<?> getFcmToken(
+			@PathVariable("userId") long userId) {
+		
+		Device device = deviceRepository.findByUser(new User(userId));
+		
+		if (device == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.ok(device.getFcmToken());
 	}
 	
 
