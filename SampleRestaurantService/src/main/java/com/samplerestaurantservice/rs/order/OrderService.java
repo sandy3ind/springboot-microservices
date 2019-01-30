@@ -25,6 +25,7 @@ import com.samplerestaurantservice.respository.order.OrderRejectionReasonReposit
 import com.samplerestaurantservice.respository.order.OrderRepository;
 import com.samplerestaurantservice.rsclient.FCMClient;
 import com.samplerestaurantservice.rsclient.FcmData;
+import com.samplerestaurantservice.rsclient.UserClient;
 import com.samplerestaurantservice.util.Constant.OrderStatus;
 
 @RestController
@@ -45,6 +46,9 @@ public class OrderService {
 	
 	@Autowired
 	private FCMClient fcmClient;
+	
+	@Autowired
+	private UserClient userClient;
 	
 
 	/**
@@ -140,9 +144,11 @@ public class OrderService {
 
 		// TODO - Send order status notification to Customer
 		FcmData fcmData = new FcmData();
-		fcmData.setToken("dfdfd");
-		fcmData.getNotification().put("title", "dsdsdsd");
-		fcmData.getData().put("title", "data title");
+		fcmData.setToken(userClient.getFcmToken(order.getUser().getId()));
+		fcmData.getNotification().put("title", "Your Order status");
+		fcmData.getNotification().put("body", order.getStatus().toString());
+		fcmData.getData().put("orderId", String.valueOf(order.getId()));
+		fcmData.getData().put("orderRef", order.getRef());
 		fcmClient.sendOrderStatus(fcmData);
 		
 		

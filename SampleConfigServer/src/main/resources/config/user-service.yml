@@ -8,3 +8,8 @@ spring:
     url:  jdbc:mysql://localhost:3306/sample
     username: root
     password: root
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
