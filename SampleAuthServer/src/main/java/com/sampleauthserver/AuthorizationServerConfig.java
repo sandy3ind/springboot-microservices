@@ -36,8 +36,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private UserDetailsService userDetailsService;
     
-    //@Autowired
-    //private PasswordEncoder oauthClientPasswordEncoder;
+    @Autowired
+    private PasswordEncoder oauthClientPasswordEncoder;
     
     @Bean
     public TokenStore tokenStore() {
@@ -51,7 +51,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
-        oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");//.passwordEncoder(oauthClientPasswordEncoder);
+    	String password = oauthClientPasswordEncoder.encode("password");
+        oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(oauthClientPasswordEncoder);
+    	//oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
     
     @Override
