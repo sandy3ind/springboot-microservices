@@ -5,6 +5,8 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Constant {
+	
+	public static final int USER_VERIFICATION_EXPIRY_DURATION = 30; // in minutes
 
 	public enum ErrorType {
 		VALIDATION, NON_UNIQUE

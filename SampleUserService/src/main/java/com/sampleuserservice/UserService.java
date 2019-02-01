@@ -1,6 +1,5 @@
 package com.sampleuserservice;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,14 +7,15 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sampleuserservice.entity.Device;
 import com.sampleuserservice.entity.Role;
 import com.sampleuserservice.entity.User;
+import com.sampleuserservice.entity.UserVerification;
 import com.sampleuserservice.repository.DeviceRepository;
 import com.sampleuserservice.repository.RoleRepository;
 import com.sampleuserservice.repository.UserRepository;
+import com.sampleuserservice.repository.UserVerificationRepository;
+import com.sampleuserservice.util.Constant;
 import com.sampleuserservice.util.Constant.ErrorType;
 import com.sampleuserservice.util.ResponseError;
+import com.sampleuserservice.util.Utility;
 
 
 @RestController
@@ -44,6 +48,12 @@ public class UserService {
 	
 	@Autowired
 	private DeviceRepository deviceRepository;
+	
+	@Autowired
+	private UserVerificationRepository userVerificationRepository;
+	
+	@Autowired
+    private PasswordEncoder userPasswordEncoder;
 	
 	/**
 	 * Save User
@@ -101,8 +111,21 @@ public class UserService {
 				user.setRoles(roles);
 			}
 			
+			user.setPassword(userPasswordEncoder.encode(user.getPassword()));
+			
 			user.setInsertedTime(new Date());
 			userRepository.save(user);
+			
+			// Also insert into UserVerification and send notification to user on his phone/email		
+			UserVerification verification = new UserVerification();
+			verification.setUser(user);
+			verification.setValid(true);
+			verification.setSentTime(new Date());
+			verification.setCode(Utility.getVerificationCode());
+			verification.setExpiryDuration(Constant.USER_VERIFICATION_EXPIRY_DURATION);
+			userVerificationRepository.save(verification);
+			
+			//TODO - send code via email or phone sms
 		}
 		
 		return ResponseEntity.ok().build();
@@ -124,6 +147,37 @@ public class UserService {
 		}
 		
 		return ResponseEntity.notFound().build();
+	}
+	
+	@PostMapping("/verify/phone/{phone}/code/{code}")
+	public ResponseEntity<?> verifyUser(
+			@PathVariable("phone") String phone,
+			@PathVariable("code") long code) {
+		
+		User user = userRepository.findByPhone(phone);		
+		if (user == null) {
+			return ResponseEntity.ok("User not found");
+		}
+		
+		// Get User's verification code
+		UserVerification userVerification = userVerificationRepository.findByUserAndIsValid(user, true);
+		if (userVerification == null) {
+			return ResponseEntity.ok("Code is not valid");
+		}
+		// Also check if expiry is not elapsed
+		DateTime sentTime = new DateTime(userVerification.getSentTime());
+		DateTime nextTime = sentTime.plusMinutes(userVerification.getExpiryDuration());
+		// SentTime + exiryDuration(mins) should be >= currentTime 
+		if (!nextTime.isAfterNow()) {
+			userVerification.setValid(false);
+			return ResponseEntity.ok("Code is Expired");
+		}
+		
+		userVerification.setValid(false);
+		userVerification.setVerifiedTime(new Date());
+		userVerificationRepository.save(userVerification);
+		
+		return ResponseEntity.ok().build();
 	}
 	
 	/**
@@ -152,6 +206,8 @@ public class UserService {
 		
 		return ResponseEntity.ok().build();
 	}
+	
+	
 	
 	/**
 	 * Get user FCM token from database

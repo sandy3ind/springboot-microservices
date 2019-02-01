@@ -59,6 +59,9 @@ public class User {
     )
 	private List<Role> roles;
 	
+	@Column(name="is_verified")
+	private boolean isVerified;
+	
 	// Constructors
 	public User() {}
 	public User(long id) {
@@ -127,5 +130,11 @@ public class User {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+	public boolean isVerified() {
+		return isVerified;
+	}
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
 	}
 }
